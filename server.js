@@ -13,6 +13,12 @@ const users = require('./controller/users');
 const passport = require('passport');
 require('./config/passport')(passport);
 
+//pinging heroku to prevent server sleeping
+const http = require("http");
+setInterval(function() {
+    http.get("http://randrest-server.herokuapp.com");
+}, 300000); // every 5 minutes (300000)
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
