@@ -18,7 +18,7 @@ const http = require("http");
 setInterval(function() {
     http.get("http://randrest-server.herokuapp.com");
     http.get("http://randrest-client.herokuapp.com");
-}, 300000); // every 5 minutes (300000)
+}, 600000); // every 10 minutes (600000)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
