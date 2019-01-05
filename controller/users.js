@@ -73,6 +73,7 @@ router.post('/login', (req, res) => {
     .then(user => {
       if(!user) {
         return res.status(404).json({email: 'the user email does not exist'});
+        // res.send('error');
     }
 
     bcrypt.compare(password, user.password)
@@ -88,6 +89,7 @@ router.post('/login', (req, res) => {
             });
         }else{
         return res.status(404).json({password: 'incorrect password'});
+        // res.send('not error')
       }
     })
   })
