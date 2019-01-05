@@ -15,11 +15,11 @@ const validateLoginInput = require('../validator/login');
 router.post('/register', (req, res) => {
   // console.log(req.body.email)
   const { errors, isValid } = validateRegisterInput(req.body);
-  console.log(errors, isValid, req.body);
+  console.log('register errors: ', req.body);
   if(!isValid){
     return res.status(400).json(errors);
   }
-  debugger;
+  // debugger;
   db.user.findOne({ email: req.body.email })
   .then(user => {
     //checks if user with email exists
@@ -81,10 +81,10 @@ router.post('/login', (req, res) => {
           const payload = {id: user.id, name: user.name};
 
           jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
-              res.json({
-                success: true,
-                token: 'Bearer ' + token,
-              });
+            res.json({
+              success: true,
+              token: 'Bearer ' + token,
+            });
             });
         }else{
         return res.status(404).json({password: 'incorrect password'});
