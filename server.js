@@ -10,6 +10,8 @@ const yelp = require('yelp-fusion');
 const yelpAPI = require('./api/yelp');
 const routes = require('./controller/routes');
 const users = require('./controller/users');
+const comments = require('./controller/comments');
+// const comments = require('./controller/comments');``
 const passport = require('passport');
 require('./config/passport')(passport);
 
@@ -31,6 +33,8 @@ app.use('/yelp', yelpAPI);
 app.use('/', routes);
 //registration routes
 app.use('/users', users);
+//comments
+app.use('/', comments);
 
 
 

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const ObjectId = mongoose.Types.ObjectId;
 //bcrypt and stuff here for passwords
 
 const userSchema = new Schema({
@@ -22,7 +23,8 @@ const userSchema = new Schema({
   date: {
     type: Date,
     default: Date.now,
-  }
+  },
+  comments: Array,
   //do passwords later
 });
 

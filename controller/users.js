@@ -15,7 +15,7 @@ const validateLoginInput = require('../validator/login');
 router.post('/register', (req, res) => {
   // console.log(req.body.email)
   const { errors, isValid } = validateRegisterInput(req.body);
-  console.log('register errors: ', req.body);
+  console.log('errors: ', errors, isValid);
   if(!isValid){
     return res.status(400).json(errors);
   }
@@ -38,17 +38,20 @@ router.post('/register', (req, res) => {
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, ((err, hash) => {
           if(err) throw err;
-          // console.log('hasing activated', newUser.password, hash);
+          console.log('hasing activated', newUser.password, hash);
           newUser.password = hash;
           newUser
             .save()
             .then(userInfo => {
               // res.json(userInfo))
+              console.log('user info: ', userInfo)
               const payload = { id: userInfo.id, name: userInfo.name }
               jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
                 res.json({
                   success: true,
                   token: 'Bearer ' + token,
+                  // id,
+                  // name,
                 });
               });
             })
@@ -85,6 +88,8 @@ router.post('/login', (req, res) => {
             res.json({
               success: true,
               token: 'Bearer ' + token,
+              id: payload.id,
+              name: payload.name,
             });
             });
         }else{
