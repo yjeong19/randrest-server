@@ -48,6 +48,7 @@ router.post('/comments', (req, res) => {
   .then(data => {
     // console.log(data);
     addCommentToRest(restaurant_id, comment, data._id, user);
+    addCommentToUser(user_id, restaurant_id, comment)
     res.json(data);
   })
   .catch(err => {
@@ -77,7 +78,25 @@ function addCommentToRest(restaurant_id, comment, user_id, name) {
 
 //create function to add comment to user;
 //need user id;
-function addCommentToUser(){};
+function addCommentToUser(user_id, restaurant_id, comment){
+  console.log('add comment to user: ', user_id, restaurant_id, comment);
+
+  db.user.findOneAndUpdate({_id: user_id}, {
+    $push: {
+      comments: [{
+      restaurant_id,
+      comment,
+      }]
+    }
+  }, { new: true })
+  .then(resp => {
+    return(resp);
+  })
+  .catch(err => {
+    console.log(err)
+    res.send(err);
+  })
+};
 
 
 module.exports = router;
