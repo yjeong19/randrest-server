@@ -9,7 +9,7 @@ router.get('/search', (req, res) => {
   console.log('/search activated')
   //postman request is req.query
   //when adding front end, check what the request comes as
-  console.log(req.query)
+  console.log('line 12 yelp: ', req.query)
   client.search({
     term: req.query.term,
     location: req.query.location,

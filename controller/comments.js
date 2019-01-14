@@ -35,14 +35,18 @@ router.put('/restaurant/comment', (req,res) => {
 
 //get comments from db based on restaurant id
 router.post('/comments', (req, res) => {
-  const { comment, restaurant_id  } = req.body.params;
-  console.log(req.body);
+  const { comment, restaurant_id, username, user_id  } = req.body.params;
+  console.log('line 39: comments: ', req.body);
   db.comments.create({
     comment,
+    restaurant_id,
+    username,
+    user_id,
+    //add user namd and user id
   })
   .then(data => {
-    console.log(data);
-    addCommentToRest(restaurant_id, comment, data._id);
+    // console.log(data);
+    addCommentToRest(restaurant_id, comment, data._id, username);
     res.json(data);
   })
   .catch(err => {
@@ -51,17 +55,21 @@ router.post('/comments', (req, res) => {
   });
 });
 
-function addCommentToRest(restaurant_id, comment, id) {
+function addCommentToRest(restaurant_id, comment, user_id, username) {
   db.restaurants.findOneAndUpdate({restaurant_id}, {
     $push: {
       comments: [{
+        restaurant_id,
         comment,
-        user: 'penis',
-        id,
+        username,
+        user_id,
       }]
     }
   }, {new: true})
-  .then(resp => console.log(resp))
+  .then(resp => {
+    console.log('line 66 comments.js: ', resp);
+    return(resp);
+  })
   .catch(err => console.log(err));
 };
 
