@@ -4,17 +4,17 @@ const isEmpty = require('./is-empty');
 module.exports = function validateRegisterInput(data){
   let errors = {};
   // console.log(data.password2);
-
-  data.name = !isEmpty(data.name) ? data.name : '';
+  console.log('data: ', data);
+  data.username = !isEmpty(data.username) ? data.username : '';
   data.email = !isEmpty(data.email) ? data.email : '';
   data.password = !isEmpty(data.password) ? data.password : '';
   data.password2 = !isEmpty(data.password2) ? data.password2: '';
 
-  if(!Validator.isLength(data.name, { min: 4, max: 20})) {
+  if(!Validator.isLength(data.username, { min: 4, max: 20})) {
     errors.name = 'Name must be between 4 - 20 characters';
   }
 
-  if(Validator.isEmpty(data.name)){
+  if(Validator.isEmpty(data.username)){
     errors.name = 'Name field is required';
   }
 

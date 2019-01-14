@@ -13,9 +13,9 @@ const validateLoginInput = require('../validator/login');
 
 //this registers users
 router.post('/register', (req, res) => {
-  // console.log(req.body.email)
+  console.log('register: ', req.body)
   const { errors, isValid } = validateRegisterInput(req.body);
-  console.log('errors: ', errors, isValid);
+  // console.log('errors: ', errors, isValid);
   if(!isValid){
     return res.status(400).json(errors);
   }
@@ -24,13 +24,14 @@ router.post('/register', (req, res) => {
   .then(user => {
     //checks if user with email exists
     if(user) {
+      console.log('email used');
       return res.status(400).json({
         email: 'This email has been used',
       })
     }else{
       //if not, run this code to save info -- salt password
       const newUser = new db.user({
-        name: req.body.name,
+        username: req.body.username,
         email: req.body.email,
         password: req.body.password,
       })
@@ -45,13 +46,13 @@ router.post('/register', (req, res) => {
             .then(userInfo => {
               // res.json(userInfo))
               console.log('user info: ', userInfo)
-              const payload = { id: userInfo.id, name: userInfo.name }
+              const payload = { id: userInfo.id, name: userInfo.username }
               jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
                 res.json({
                   success: true,
                   token: 'Bearer ' + token,
-                  // id,
-                  // name,
+                  // test: 'penis',
+                  payload
                 });
               });
             })
@@ -82,14 +83,15 @@ router.post('/login', (req, res) => {
     bcrypt.compare(password, user.password)
       .then(isMatch => {
         if(isMatch) {
-          const payload = {id: user.id, name: user.name};
+          const payload = {id: user.id, name: user.username};
+          console.log(payload);
 
           jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
             res.json({
               success: true,
               token: 'Bearer ' + token,
               id: payload.id,
-              name: payload.name,
+              username: payload.name,
             });
             });
         }else{
@@ -105,7 +107,7 @@ router.get('/current', passport.authenticate('jwt', {session: false}), (req, res
   // console.log(req)
   res.json({
     id: req.user.id,
-    name: req.user.name,
+    username: req.user.username,
     email: req.user.email,
   });
 })
