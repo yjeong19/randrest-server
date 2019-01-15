@@ -33,11 +33,26 @@ router.put('/restaurant/comment', (req,res) => {
   })
 });
 
-//get comments from db based on restaurant id
+//get user comments
+router.get('/comments', (req, res) => {
+  // const { user_id } = req.body.params;
+  // console.log(user_id);
+  const { user_id } = req.query;
+  console.log('get comments activated: ', req.query)
+  db.user.findById({_id: user_id})
+  .then(resp => {
+    console.log(resp);
+    res.send(resp.comments);
+  })
+  .catch(err => {
+    console.log(err);
+  })
+});
+
+
+//post comments
 router.post('/comments', (req, res) => {
   const { comment, restaurant_id, user, user_id  } = req.body.params;
-  console.log(req.body);
-  console.log(comment, restaurant_id, user, user_id);
   db.comments.create({
     comment,
     restaurant_id,
