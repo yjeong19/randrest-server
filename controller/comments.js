@@ -52,7 +52,8 @@ router.get('/comments', (req, res) => {
 
 //post comments
 router.post('/comments', (req, res) => {
-  const { comment, restaurant_id, user, user_id  } = req.body.params;
+  const { comment, restaurant_id, user, user_id, restaurant_name, image_url  } = req.body.params;
+  console.log(req.body.params)
   db.comments.create({
     comment,
     restaurant_id,
@@ -63,7 +64,7 @@ router.post('/comments', (req, res) => {
   .then(data => {
     // console.log(data);
     addCommentToRest(restaurant_id, comment, data._id, user);
-    addCommentToUser(user_id, restaurant_id, comment)
+    addCommentToUser(user_id, restaurant_id, comment, restaurant_name, image_url)
     res.json(data);
   })
   .catch(err => {
@@ -93,7 +94,7 @@ function addCommentToRest(restaurant_id, comment, user_id, name) {
 
 //create function to add comment to user;
 //need user id;
-function addCommentToUser(user_id, restaurant_id, comment){
+function addCommentToUser(user_id, restaurant_id, comment, restaurant_name, image_url){
   console.log('add comment to user: ', user_id, restaurant_id, comment);
 
   db.user.findOneAndUpdate({_id: user_id}, {
@@ -101,6 +102,8 @@ function addCommentToUser(user_id, restaurant_id, comment){
       comments: [{
       restaurant_id,
       comment,
+      restaurant_name,
+      image_url,
       }]
     }
   }, { new: true })

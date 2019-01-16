@@ -6,6 +6,8 @@ const commentsModel = new Schema({
   user_id: String,
   comment: String,
   username: String,
+  restaurant_name: String,
+  image_url: String, 
 });
 
 module.exports = mongoose.model('comments', commentsModel);
