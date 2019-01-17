@@ -48,7 +48,14 @@ router.get('/random', (req, res) => {
     console.log(err);
     res.send(err);
   })
-})
+});
+
+// router.get('/single', (req,res) => {
+//   console.log(req.query);
+//   client.businessMatch('lookup', {
+//     name:
+//   })
+// });
 
 
 module.exports = router;

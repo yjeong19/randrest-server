@@ -56,6 +56,7 @@ router.get('/restaurant/comments', (req, res) => {
 //findOneandUpdate createone if data dne: set {upsert: true};
 //when user selects a restaurant, it updates db with new restaurant or returns existing one.
 router.put('/restaurant/selected', (req, res) => {
+  console.log(req.body);
   let { params } = req.body;
   let { id } = req.body.params;
   console.log(params.id, 'find one and update testing method');
@@ -91,7 +92,21 @@ router.put('/restaurant/selected', (req, res) => {
     .catch(err => {
       console.log(err);
     })
+});
 
+//find one restaurnt -- most likely called by userpage selecting restaurant that they commented on.
+router.get('/restaurant', (req,res) => {
+  let { restaurant_id } = req.query;
+  console.log('line 99: ', req.query);
+  db.restaurants.findOne({restaurant_id})
+  .then(data => {
+    console.log(data);
+    res.send(data);
+  })
+  .catch(err => {
+    console.log(err);
+    res.send(err);
+  })
 })
 
 
