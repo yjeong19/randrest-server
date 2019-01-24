@@ -51,7 +51,6 @@ router.post('/register', (req, res) => {
                 res.json({
                   success: true,
                   token: 'Bearer ' + token,
-                  // test: 'penis',
                   payload
                 });
               });

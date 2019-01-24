@@ -49,6 +49,46 @@ router.get('/comments', (req, res) => {
   })
 });
 
+//delete comments
+router.delete('/comments', (req, res) => {
+  console.log(req.body);
+  const { _id } = req.body;
+
+  db.comments.findByIdAndRemove({_id})
+  .then(resp => {
+    console.log(resp)
+    res.send(resp);
+  })
+  .catch(err => {
+    console.log(err)
+  })
+});
+
+//function to delete from restaurants;
+function delComFromRest(rest_id, comm_id) {
+  console.log(rest_id, comm_id);
+  db.restaurants.findOne({})
+};
+
+//testing get request
+router.put('/restaurant/del/com', (req, res) => {
+  console.log(req.body);
+  const { rest_id, comm_id } = req.body;
+  db.restaurants.updateOne({restaurant_id: rest_id},
+    { $pull: {
+      comments: [{
+          comm_id
+        }]
+    }
+  }, { safe: true, multi:true })
+  .then(resp => {
+    console.log(resp);
+    res.send(resp)
+  })
+  .catch(err => {console.log(err)});
+});
+
+
 
 //post comments
 router.post('/comments', (req, res) => {
@@ -64,7 +104,7 @@ router.post('/comments', (req, res) => {
   .then(data => {
     // console.log(data);
     addCommentToRest(restaurant_id, comment, data._id, user);
-    addCommentToUser(user_id, restaurant_id, comment, restaurant_name, image_url)
+    addCommentToUser(user_id, restaurant_id, comment, restaurant_name, image_url, data._id)
     res.json(data);
   })
   .catch(err => {
@@ -73,15 +113,15 @@ router.post('/comments', (req, res) => {
   });
 });
 
-function addCommentToRest(restaurant_id, comment, user_id, name) {
-  console.log('line 60: ', name);
+function addCommentToRest(restaurant_id, comment, comm_id, name) {
+  console.log('line 116: ',comm_id)
   db.restaurants.findOneAndUpdate({restaurant_id}, {
     $push: {
       comments: [{
         restaurant_id,
         comment,
         name,
-        user_id,
+        comm_id,
       }]
     }
   }, {new: true})
@@ -94,7 +134,7 @@ function addCommentToRest(restaurant_id, comment, user_id, name) {
 
 //create function to add comment to user;
 //need user id;
-function addCommentToUser(user_id, restaurant_id, comment, restaurant_name, image_url){
+function addCommentToUser(user_id, restaurant_id, comment, restaurant_name, image_url, comm_id){
   console.log('add comment to user: ', user_id, restaurant_id, comment);
 
   db.user.findOneAndUpdate({_id: user_id}, {
@@ -104,6 +144,7 @@ function addCommentToUser(user_id, restaurant_id, comment, restaurant_name, imag
       comment,
       restaurant_name,
       image_url,
+      comm_id,
       }]
     }
   }, { new: true })
