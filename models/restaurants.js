@@ -24,7 +24,12 @@ const restaurantsModel = new Schema({
     dislikes: Number,
     percentage: Number,
   },
-  comments: Array,
+  comments: [{
+    restaurant_id : String,
+		comment : String,
+		name : String,
+		comm_id : String,
+  }],
 
 });
 

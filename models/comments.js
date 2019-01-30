@@ -7,7 +7,8 @@ const commentsModel = new Schema({
   comment: String,
   username: String,
   restaurant_name: String,
-  image_url: String, 
+  image_url: String,
 });
 
-module.exports = mongoose.model('comments', commentsModel);
+
+module.exports = mongoose.model('comment', commentsModel);

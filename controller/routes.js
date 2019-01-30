@@ -59,7 +59,7 @@ router.put('/restaurant/selected', (req, res) => {
   console.log(req.body);
   let { params } = req.body;
   let { id } = req.body.params;
-  console.log(params.id, 'find one and update testing method');
+  console.log(params.location, 'find one and update testing method');
   let condition = {restaurant_id: `${id}`}
   let update = {
     restaurant_id: params.id,
