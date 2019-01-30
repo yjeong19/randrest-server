@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
+const mongoose = require('mongoose');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 //updates existing db and add comments on submit
 // router.put('/restaurant/comment', (req,res) => {
@@ -51,10 +53,10 @@ router.get('/comments', (req, res) => {
 
 //delete comments
 router.delete('/comments', (req, res) => {
-  console.log(req.body);
-  const { _id } = req.body;
-
-  db.comments.findByIdAndRemove({_id})
+  console.log(req.query);
+  const { id } = req.query;
+  console.log('delete activated', id)
+  db.comments.findByIdAndRemove(ObjectId(id))
   .then(resp => {
     console.log(resp)
     res.send(resp);
